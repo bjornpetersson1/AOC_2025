@@ -4439,14 +4439,35 @@ for (int i = 0; i < inputs.Length; i++)
         ticks += rotation[j];
     }
     int intTicks = int.Parse(ticks);
+    dialNo = ((dialNo % 100) + 100) % 100;
+    int oldValue = dialNo;
     if (direction == 'L') dialNo -= intTicks;
     else dialNo += intTicks;
-    if (dialNo == 0 || dialNo % 100 == 0) code++;
+    if (dialNo == 0 ) code++;
+    else if (dialNo >= 100 )
+    {
+        int counting = Math.Abs(dialNo / 100);
+        code += counting;
+    }
+    else if (dialNo < 0)
+    {
+        if (oldValue == 0)
+        {
+            int counting = Math.Abs(dialNo / 100);
+            code += counting;
+        }
+        else
+        {
+            int counting = Math.Abs(dialNo / 100);
+            code += counting;
+            code++;
+        }
+    }
 }
 
 Console.WriteLine(code);
 
-
+//gör %100 på första talet och gör det positivt, lägg till/dra ifrån ticken OM resultatet blir mer än hundra, mindre än 0, 0 eller %100 = 0
 
 
 
