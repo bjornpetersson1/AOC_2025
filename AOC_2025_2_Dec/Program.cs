@@ -51,20 +51,27 @@ Console.WriteLine(sumOfInvalids);
 
 static bool IsInvalid(string id)
 {
-    char check = id[0];
+    int n = id.Length;
 
-    List<int> indexRepeats = new List<int>(); 
-    for (global::System.Int32 i = 1; i <= id.Length; i++)
+    for (int len = 1; len <= n / 2; len++)
     {
-        if (check == id[i]) indexRepeats.Add(i);
+        if (n % len != 0) continue;
+
+        string segment = id.Substring(0, len);
+        bool matches = true;
+
+        for (int pos = 0; pos < n; pos += len)
+        {
+            if (id.Substring(pos, len) != segment)
+            {
+                matches = false;
+                break;
+            }
+        }
+
+        if (matches)
+            return true;
     }
-    for (global::System.Int32 i = 0; i < indexRepeats.Count; i++)
-    {
-        if
-    }
+
+    return false;
 }
-
-//kolla så längden mellan indexen är samma
-    //kolla så index +i är samma på alla
-
-//edgecaset 123112311231
