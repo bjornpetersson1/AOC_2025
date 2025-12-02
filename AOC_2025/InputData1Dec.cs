@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AOC_2025
 {
-    static class InputData
+    static class InputData1Dec
     {
         public static string input =
                                     @"R45

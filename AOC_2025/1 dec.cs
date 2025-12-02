@@ -2,7 +2,7 @@
 using System;
 using System.Reflection.Emit;
 
-string input = InputData.input;
+string input = InputData1Dec.input;
 string[] inputs = input.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
 int code = 0;
 int dialNo = 50;
