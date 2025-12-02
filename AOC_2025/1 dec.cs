@@ -4431,18 +4431,22 @@ int code = 0;
 int dialNo = 50;
 for (int i = 0; i < inputs.Length; i++)
 {
+    string ticks = string.Empty;
     string rotation = inputs[i];
     char direction = rotation[0];
-    string ticks = string.Empty;
+
     for (global::System.Int32 j = 1; j < rotation.Length; j++)
     {
         ticks += rotation[j];
     }
     int intTicks = int.Parse(ticks);
+    
     dialNo = ((dialNo % 100) + 100) % 100;
     int oldValue = dialNo;
+    
     if (direction == 'L') dialNo -= intTicks;
     else dialNo += intTicks;
+    
     if (dialNo == 0 ) code++;
     else if (dialNo >= 100 )
     {
@@ -4466,8 +4470,6 @@ for (int i = 0; i < inputs.Length; i++)
 }
 
 Console.WriteLine(code);
-
-//gör %100 på första talet och gör det positivt, lägg till/dra ifrån ticken OM resultatet blir mer än hundra, mindre än 0, 0 eller %100 = 0
 
 
 
