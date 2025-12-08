@@ -32,77 +32,93 @@ using System.Xml;
 //Console.WriteLine(totalSum);
 
 //del 2
-//Du räknar från fel håll du ska gå från höger till vänster och dom
-    //eller inte, det varierar tydligen, du måste splitta på ett bättre sätt för att få koll på vilken kolumn dom är i
 string[] rowsOfNumbers = InputData.numbers.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
-string[] numbers0 = rowsOfNumbers[0].Split(' ', StringSplitOptions.RemoveEmptyEntries);
-string[] numbers1 = rowsOfNumbers[1].Split(' ', StringSplitOptions.RemoveEmptyEntries);
-string[] numbers2 = rowsOfNumbers[2].Split(' ', StringSplitOptions.RemoveEmptyEntries);
-string[] numbers3 = rowsOfNumbers[3].Split(' ', StringSplitOptions.RemoveEmptyEntries);
 string[] operators = InputData.operators.Split(' ', StringSplitOptions.RemoveEmptyEntries);
 long totalSum = 0;
-List<string> toSortNum = new List<string>();
-List<string> sortedNums = new List<string>();
 List<string> convertedNums = new List<string>();
-List<char> numIinputs = new List<char>();
+List<string> num0inputs = new List<string>();
+List<string> num1inputs = new List<string>();
+List<string> num2inputs = new List<string>();
+List<string> num3inputs = new List<string>();
 
-foreach (var item in InputData.numbers)
+string numWithPlacement = string.Empty;
+string convertedNum = string.Empty;
+
+List<char> operatorInputs = new List<char>();
+List<int> splitIndexes = new List<int>();
+int splitIndex = 0;
+
+foreach (var o in InputData.operators)
 {
-    numIinputs.Add(item);
+    if (o != ' ')
+    {
+        splitIndexes.Add(splitIndex);
+        splitIndex++;
+    }
+    else splitIndex++;
 }
-    //GENOM DET HÄR FINNS LÖSNINGEN
+
+for (global::System.Int32 j = 0; j < splitIndexes.Count; j++)
+{
+    if (j == splitIndexes.Count - 1)
+    {
+        num0inputs.Add(rowsOfNumbers[0].Substring(splitIndexes[j]));
+        num1inputs.Add(rowsOfNumbers[1].Substring(splitIndexes[j]));
+        num2inputs.Add(rowsOfNumbers[2].Substring(splitIndexes[j]));
+        num3inputs.Add(rowsOfNumbers[3].Substring(splitIndexes[j]));
+    }
+    else
+    {
+        num0inputs.Add(rowsOfNumbers[0].Substring(splitIndexes[j], splitIndexes[j + 1] - splitIndexes[j]));
+        num1inputs.Add(rowsOfNumbers[1].Substring(splitIndexes[j], splitIndexes[j + 1] - splitIndexes[j]));
+        num2inputs.Add(rowsOfNumbers[2].Substring(splitIndexes[j], splitIndexes[j + 1] - splitIndexes[j]));
+        num3inputs.Add(rowsOfNumbers[3].Substring(splitIndexes[j], splitIndexes[j + 1] - splitIndexes[j]));
+    }
+}
 
 for (int i = 0; i < operators.Length; i++)
 {
-    toSortNum.Clear();
     convertedNums.Clear();
-    string convertedNum = string.Empty;
-    long sumProduct = 0;
-    toSortNum.Add(numbers0[i]);
-    toSortNum.Add(numbers1[i]);
-    toSortNum.Add(numbers2[i]);
-    toSortNum.Add(numbers3[i]);
-
-
     if (operators[i] == "*")
     {
-        for (global::System.Int32 j = 0; j < 6; j++)
+        for (global::System.Int32 j = 0; j < num0inputs[i].Length; j++)
         {
             convertedNum = string.Empty;
-            for (global::System.Int32 k = 0; k < toSortNum.Count; k++)
-            {
-                if (toSortNum[k].Length > j) convertedNum += toSortNum[k][j];
-
-            }
-            if (convertedNum.Length == 0)
-            {
-                totalSum += sumProduct;
-                break;
-            }
-            else if (j == 0) sumProduct += long.Parse(convertedNum);
-            else sumProduct *= long.Parse(convertedNum);
+            convertedNum += num0inputs[i][j];
+            convertedNum += num1inputs[i][j];
+            convertedNum += num2inputs[i][j];
+            convertedNum += num3inputs[i][j];
+            convertedNums.Add(convertedNum.Trim());
         }
+        convertedNums.RemoveAll(s => string.IsNullOrWhiteSpace(s));
+        long product = 0;
+        for (global::System.Int32 j = 0; j < convertedNums.Count; j++)
+        {
+            if (j == 0) product = long.Parse(convertedNums[j]);
+            else product *= long.Parse(convertedNums[j]);
+        }
+        totalSum += product;
     }
     else if (operators[i] == "+")
     {
-        for (global::System.Int32 j = 0; j < 6; j++)
+        for (global::System.Int32 j = 0; j < num0inputs[i].Length; j++)
         {
             convertedNum = string.Empty;
-            for (global::System.Int32 k = 0; k < toSortNum.Count; k++)
-            {
-                if (toSortNum[k].Length > j) convertedNum += toSortNum[k][j];
-
-            }
-            if (convertedNum.Length == 0)
-            {
-                totalSum += sumProduct;
-                break;
-            }
-            else sumProduct += long.Parse(convertedNum);
+            convertedNum += num0inputs[i][j];
+            convertedNum += num1inputs[i][j];
+            convertedNum += num2inputs[i][j];
+            convertedNum += num3inputs[i][j];
+            convertedNums.Add(convertedNum.Trim());
         }
+        convertedNums.RemoveAll(s => string.IsNullOrWhiteSpace(s));
+        long sum = 0;
+        for (global::System.Int32 j = 0; j < convertedNums.Count; j++)
+        {
+            sum += long.Parse(convertedNums[j]);
+        }
+            totalSum += sum;
     }
 }
-
 
 Console.WriteLine(totalSum);
 
