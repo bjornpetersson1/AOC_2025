@@ -62,20 +62,31 @@ using System.Numerics;
 
 
 //Del två
-//räkna varje möjlig väg på en split-rad(räkna antal S), sen gånga varje rad,
-//  är det bara det? känns för enkelt
 
     // du måste hitta ett sätt att mergea S
     //..SSS..
     //.S^S^S.  <-Det egdecaset
+
+//Kanske gå en annan väg, räkna en väg åt gången?
+    //först alla till vänster, sista höger, näst sista höger -> sista höger + vänster
+
+//Splitnivåer är på jämna rader
+    //Kolla om det splittar
+        //gå vänster till slut
+        //gå upp en från slutet, gå höger
+            //kolla om det splittar ner mot botten
+                //gå vänster 
+                //gå höger
+
 List<string> rowsOfTree = (InputData.christmasTree.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries)).ToList();
 List<int> cascadeIndex = new List<int>();
 int count = 0;
 List<char> futureChars = new List<char>();
 List<char> currentChars = new List<char>();
-int splitCount = 0;
+int splitCount = 1;
 BigInteger possibleWays = BigInteger.Zero;
 List<int> sCount = new List<int>();
+
 
 for (int i = 0; i < rowsOfTree.Count; i++)
 {
@@ -142,4 +153,4 @@ for (int i = 0; i < rowsOfTree.Count - 1; i++)
     if (i == 0) possibleWays = activeWays;
     else if (i % 2 == 0) possibleWays *= activeWays;
 }
-Console.WriteLine(possibleWays);
+Console.WriteLine(splitCount);
