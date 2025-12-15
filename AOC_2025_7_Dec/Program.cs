@@ -77,6 +77,13 @@ using System.Numerics;
             //kolla om det splittar ner mot botten
                 //gå vänster 
                 //gå höger
+        //0 - vänster, 1 - rakt, 2 - höger
+            //gå hela vägen och spara siffror som string
+            //LOOP START
+            //kolla efter första 0 från slutet och byt mot 2
+                //gå hela vägen till slutet med bara 0 (förutom 1 då) 
+            //LOOP SLUT
+                //Loopa tills det inte finns några 0 kvar
 
 List<string> rowsOfTree = (InputData.christmasTree.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries)).ToList();
 List<int> cascadeIndex = new List<int>();
