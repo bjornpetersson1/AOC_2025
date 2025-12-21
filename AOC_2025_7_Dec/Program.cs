@@ -63,101 +63,60 @@ using System.Numerics;
 
 //Del två
 
-    // du måste hitta ett sätt att mergea S
-    //..SSS..
-    //.S^S^S.  <-Det egdecaset
+// räkna hur många strålar som åker genom en specifik punkt och spara det istället för att hålla på och jämnföra strängar
+// summera sen antalet på sista raden :)
 
-//Kanske gå en annan väg, räkna en väg åt gången?
-    //först alla till vänster, sista höger, näst sista höger -> sista höger + vänster
+List<string> rowsOfTree = (InputData.christmasTree
+            .Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries))
+            .ToList();
 
-//Splitnivåer är på jämna rader
-    //Kolla om det splittar
-        //gå vänster till slut
-        //gå upp en från slutet, gå höger
-            //kolla om det splittar ner mot botten
-                //gå vänster 
-                //gå höger
-        //0 - vänster, 1 - rakt, 2 - höger
-            //gå hela vägen och spara siffror som string
-            //LOOP START
-            //kolla efter första 0 från slutet och byt mot 2
-                //gå hela vägen till slutet med bara 0 (förutom 1 då) 
-            //LOOP SLUT
-                //Loopa tills det inte finns några 0 kvar
+int height = rowsOfTree.Count;
+int width = rowsOfTree[0].Length;
 
-List<string> rowsOfTree = (InputData.christmasTree.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries)).ToList();
-List<int> cascadeIndex = new List<int>();
-int count = 0;
-List<char> futureChars = new List<char>();
-List<char> currentChars = new List<char>();
-int splitCount = 1;
-BigInteger possibleWays = BigInteger.Zero;
-List<int> sCount = new List<int>();
+BigInteger[,] possiblePaths = new BigInteger[height, width];
 
 
-for (int i = 0; i < rowsOfTree.Count; i++)
+for (int x = 0; x < width; x++)
 {
-    futureChars.Add('.');
+    if (rowsOfTree[0][x] == 'S')
+        possiblePaths[0, x] = 1;
 }
-foreach (var c in rowsOfTree[0])
+
+for (int y = 0; y < height - 1; y++)
 {
-    currentChars.Add(c);
+    for (int x = 0; x < width; x++)
+    {
+        if (possiblePaths[y, x] == 0) continue;
+
+        char below = rowsOfTree[y + 1][x];
+
+        if (below == '^')
+        {
+            if (x > 0) possiblePaths[y + 1, x - 1] += possiblePaths[y, x];
+            if (x < width - 1) possiblePaths[y + 1, x + 1] += possiblePaths[y, x];
+        }
+        else
+        { 
+            possiblePaths[y + 1, x] += possiblePaths[y, x];
+        }
+    }
 }
-for (int i = 0; i < rowsOfTree.Count - 1; i++)
-{
-    count = 0;
-    cascadeIndex.Clear();
-    foreach (var c in currentChars)
-    {
-        if (c == 'S')
-        {
-            cascadeIndex.Add(count);
-        }
-        count++;
-    }
-    for (global::System.Int32 j = 0; j < rowsOfTree[i].Length; j++)
-    {
-        if (cascadeIndex.Contains(j))
-        {
-            if (rowsOfTree[i + 1][j] == '^')
-            {
-                futureChars[j - 1] = 'S';
-                futureChars[j] = '^';
-                futureChars[j + 1] = 'S';
-                j++;
-                splitCount++;
-            }
-            else
-            {
-                futureChars[j] = 'S';
-            }
-        }
-        else futureChars[j] = '.';
-    }
 
-    sCount.Clear();
-    int activeWays = 0;
-    for (global::System.Int32 j = 0; j < currentChars.Count; j++)
-    {
-        if (i == 0 && currentChars[j] == 'S') activeWays++; 
-        else if (i != 0)
-        {
-            bool leftIsSplitter = j > 0 && currentChars[j - 1] == '^';
-            bool rightIsSplitter = j < currentChars.Count - 1 && currentChars[j + 1] == '^';
-            if (currentChars[j] == 'S' && (leftIsSplitter || rightIsSplitter))
-            {
-                activeWays++;
-            }
-        }
+BigInteger total = 0;
+for (int x = 0; x < width; x++)
+    total += possiblePaths[height - 1, x];
 
-    }
-    currentChars.Clear();
-    foreach (var c in futureChars)
-    {
-        currentChars.Add(c);
-    }
+Console.WriteLine(total);
 
-    if (i == 0) possibleWays = activeWays;
-    else if (i % 2 == 0) possibleWays *= activeWays;
-}
-Console.WriteLine(splitCount);
+
+
+
+
+
+
+
+
+
+
+
+
