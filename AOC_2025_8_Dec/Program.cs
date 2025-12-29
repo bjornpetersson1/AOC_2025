@@ -3,6 +3,7 @@ using System.Drawing;
 //räkna ut avståndet, sortera, koppla ihop, multiplicera top 3 grupper
 
     //allt hamnar i samma grupp nu.. måste läsa igenom uppgiften igen, måste ha missat någon parameter
+        //hur ska man hantera när båda är i en grupp men inte i samma? oklart i uppgiften
 
 List<string> stringPoints = (InputData.inputPoints.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries)).ToList();
 var points = new HashSet<(float x, float y, float z)>();
@@ -46,35 +47,35 @@ foreach (var s in sortedPoints)
     }
     else if (groupedPoints.TryGetValue(s.p1, out int point5Group) && groupedPoints.TryGetValue(s.p2, out int point6Group))
     {
-        if (point5Group != point6Group)
-        {
-            int size1 = CountGroupMembers(point5Group);
-            int size2 = CountGroupMembers(point6Group);
+        //if (point5Group != point6Group)
+        //{
+        //    int size1 = CountGroupMembers(point5Group);
+        //    int size2 = CountGroupMembers(point6Group);
 
-            int targetGroup;
-            int sourceGroup;
+        //    int targetGroup;
+        //    int sourceGroup;
 
-            if (size1 >= size2)
-            {
-                targetGroup = point5Group;   
-                sourceGroup = point6Group;   
-            }
-            else
-            {
-                targetGroup = point6Group;
-                sourceGroup = point5Group;
-            }
+        //    if (size1 >= size2)
+        //    {
+        //        targetGroup = point5Group;
+        //        sourceGroup = point6Group;
+        //    }
+        //    else
+        //    {
+        //        targetGroup = point6Group;
+        //        sourceGroup = point5Group;
+        //    }
 
-            var keysToMove = groupedPoints
-                .Where(p => p.Value == sourceGroup)
-                .Select(p => p.Key)
-                .ToList();
+        //    var keysToMove = groupedPoints
+        //        .Where(p => p.Value == sourceGroup)
+        //        .Select(p => p.Key)
+        //        .ToList();
 
-            foreach (var key in keysToMove)
-            {
-                groupedPoints[key] = targetGroup;
-            }
-        }
+        //    foreach (var key in keysToMove)
+        //    {
+        //        groupedPoints[key] = targetGroup;
+        //    }
+        //}
     }
     else
     {
@@ -83,7 +84,19 @@ foreach (var s in sortedPoints)
         group++;
     }
 }
-Console.WriteLine();
+var largestGroups = new int[3];
+largestGroups[0] = 1;
+largestGroups[1] = 2;
+largestGroups[2] = 3;
+
+for (global::System.Int32 i = 1; i <= group; i++)
+{
+    if (CountGroupMembers(i) > largestGroups[0]) largestGroups[0] = CountGroupMembers(i);
+    else if (CountGroupMembers(i) > largestGroups[1]) largestGroups[1] = CountGroupMembers(i);
+    else if (CountGroupMembers(i) > largestGroups[2]) largestGroups[2] = CountGroupMembers(i);
+}
+int result = largestGroups[0] * largestGroups[1] * largestGroups[2];
+Console.WriteLine(result);
 
 int CountGroupMembers(int groupId)
 {
