@@ -47,6 +47,23 @@ foreach (var s in sortedPoints)
     }
     else if (groupedPoints.TryGetValue(s.p1, out int point5Group) && groupedPoints.TryGetValue(s.p2, out int point6Group))
     {
+        if (point5Group != point6Group)
+        {
+            int size1 = CountGroupMembers(point5Group);
+            int size2 = CountGroupMembers(point6Group);
+
+            if (size1 > size2)
+            {
+                groupedPoints[s.p2] = groupedPoints[s.p1];
+            }
+            else if (size2 > size1)
+            {
+                groupedPoints[s.p1] = groupedPoints[s.p2];
+            }
+
+        }
+            //det här funkar tydligen inte heller, jag har nog för dålig koll på hur hashset funkar
+
         //if (point5Group != point6Group)
         //{
         //    int size1 = CountGroupMembers(point5Group);
